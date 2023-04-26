@@ -54,12 +54,12 @@ class IMAGENETDataModule(pl.LightningDataModule):
     def setup(self, stage='fit'):
         # Assign train/val datasets for use in dataloaders
         if stage == 'fit' or stage is None:
-            self.imagenet_train = datasets.ImageFolder(root='/data/train', transform=self.transform_train)
-            self.imagenet_val = datasets.ImageFolder(root='/data/val',  transform=self.transform_val)
+            self.imagenet_train = datasets.ImageFolder(root='data/train', transform=self.transform_train)
+            self.imagenet_val = datasets.ImageFolder(root='data/val',  transform=self.transform_val)
 
         # Assign test dataset for use in dataloader(s)
         if stage == 'test' or stage is None:
-            self.imagenet_test = datasets.ImageFolder(root='/data/test',  transform=self.transform_val)
+            self.imagenet_test = datasets.ImageFolder(root='data/test',  transform=self.transform_val)
 
     def train_dataloader(self):
         train_sampler = DistributedSampler(self.imagenet_train, num_replicas=2, rank=self.local_rank)
