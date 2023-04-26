@@ -173,7 +173,7 @@ wandb_logger.experiment.config["batch_size"] = TRAIN_BATCH
 model = LitResnet152(LR, MOMENTUM, WEIGHT_DECAY)
 
 # Initialize a trainer
-trainer = pl.Trainer(max_epochs=EPOCHS, gpus=1,num_nodes=2,accelerator='ddp', logger=wandb_logger)
+trainer = pl.Trainer(max_epochs=EPOCHS, gpus=1,num_nodes=2,accelerator='gpu', strategy="ddp", logger=wandb_logger)
 
 # train the model
 trainer.fit(model, dm)
