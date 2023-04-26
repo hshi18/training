@@ -172,4 +172,4 @@ model = LitResnet152(LR, MOMENTUM, WEIGHT_DECAY)
 trainer = pl.Trainer(max_epochs=EPOCHS, gpus=1, accelerator='cuda', logger=wandb_logger)
 
 # train the model
-trainer.fit(model, dm,train_dataloaders=train_loader)
+trainer.fit(model, dm)
