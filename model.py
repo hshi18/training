@@ -14,7 +14,7 @@ from torch.cuda.amp import autocast
 from torch.utils.data.distributed import DistributedSampler
 
 from pytorch_lightning.loggers import WandbLogger
-import wandb
+import os
 
 
 # config
@@ -27,14 +27,15 @@ TRAIN_BATCH=128
 VAL_BATCH=128
 imagenet_mean_RGB = [0.47889522, 0.47227842, 0.43047404]
 imagenet_std_RGB = [0.229, 0.224, 0.225]
-GPU = 0
+local_rank = int(os.environ['LOCAL_RANK'])
 
 class IMAGENETDataModule(pl.LightningDataModule):
-    def __init__(self, train_batch_size, val_batch_size, data_dir: str = './'):
+    def __init__(self, train_batch_size, val_batch_size, local_rank,data_dir: str = './'):
         super().__init__()
         self.data_dir = data_dir
         self.train_batch_size = train_batch_size
         self.val_batch_size = val_batch_size
+        self.local_rank = local_rank
 
         self.transform_train = transforms.Compose([
             transforms.RandomResizedCrop(224),
@@ -72,7 +73,7 @@ class IMAGENETDataModule(pl.LightningDataModule):
     def test_dataloader(self):
         return DataLoader(self.imagenet_test, batch_size=self.batch_size, num_workers = 2)
 
-dm = IMAGENETDataModule(TRAIN_BATCH, VAL_BATCH)
+dm = IMAGENETDataModule(TRAIN_BATCH, VAL_BATCH, local_rank)
 dm.setup()
 
 train_data = dm.imagenet_train
