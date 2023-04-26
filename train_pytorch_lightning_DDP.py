@@ -13,7 +13,9 @@ from pytorch_lightning.callbacks import ModelCheckpoint
 from torch.cuda.amp import autocast
 from torch.utils.data.distributed import DistributedSampler
 
-from pytorch_lightning.loggers import TensorBoardLogger
+from pytorch_lightning.loggers import WandbLogger
+import wandb
+
 
 # config
 EPOCHS = 2
@@ -161,13 +163,14 @@ class LitResnet152(LightningModule):
         return optimizer
 
 # Set up TensorBoard logger
-logger = TensorBoardLogger('tb_logs', name='imagenet')
+wandb_logger = WandbLogger(project='h9')
+wandb_logger.experiment.config["batch_size"] = TRAIN_BATCH
 
 # model = resnet18(pretrained = False, progress  = True)
 model = LitResnet152(LR, MOMENTUM, WEIGHT_DECAY)
 
 # Initialize a trainer
-trainer = pl.Trainer(max_epochs=EPOCHS, gpus=1, accelerator='ddp_spawn', logger=logger)
+trainer = pl.Trainer(max_epochs=EPOCHS, gpus=1, accelerator='ddp_spawn', logger=wandb_logger)
 
 # train the model
-trainer.fit(model, dm)
+trainer.fit(model, dm,train_dataloaders=train_loader)
