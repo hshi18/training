@@ -126,7 +126,7 @@ class LitResnet152(LightningModule):
         self.lr = learning_rate
         self.momentum = momentum
         self.weight_decay = weight_decay
-        self.criterion = nn.CrossEntropyLoss().cuda(GPU)
+        self.criterion = nn.CrossEntropyLoss().cuda(0)
     
     def forward(self, x):
         return self.nn.forward(x)
