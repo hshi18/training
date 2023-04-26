@@ -45,7 +45,7 @@ class IMAGENETDataModule(pl.LightningDataModule):
         ])
         
         self.transform_val = transforms.Compose([
-            transforms.Resize(224),
+            transforms.Resize((224, 224)),
             transforms.ToTensor(),
             transforms.Normalize(imagenet_mean_RGB, imagenet_std_RGB),
         ])
