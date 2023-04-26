@@ -27,6 +27,7 @@ TRAIN_BATCH=128
 VAL_BATCH=128
 imagenet_mean_RGB = [0.47889522, 0.47227842, 0.43047404]
 imagenet_std_RGB = [0.229, 0.224, 0.225]
+GPU = 0
 
 class IMAGENETDataModule(pl.LightningDataModule):
     def __init__(self, train_batch_size, val_batch_size,data_dir: str = './'):
@@ -121,7 +122,7 @@ class LitResnet152(LightningModule):
         self.lr = learning_rate
         self.momentum = momentum
         self.weight_decay = weight_decay
-        self.criterion = nn.CrossEntropyLoss().cuda(GPU)
+        self.criterion = nn.CrossEntropyLoss().cuda(0)
     
     def forward(self, x):
         return self.nn.forward(x)
